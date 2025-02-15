@@ -13,5 +13,4 @@ export JDK_JAVA_OPTIONS="--add-opens=java.base/java.lang=ALL-UNNAMED \
 --add-opens=java.base/sun.security.action=ALL-UNNAMED \
 --add-opens=java.base/sun.util.calendar=ALL-UNNAMED"
 export SPARK_LOCAL_IP=localhost
-      
 ./gradlew run

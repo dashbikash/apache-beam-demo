@@ -29,12 +29,15 @@ ext {
 
 dependencies {
     // App dependencies.
-    implementation "org.apache.beam:beam-sdks-java-core:2.61.0"
-    implementation "org.apache.beam:beam-runners-direct-java:2.61.0"
+    implementation "org.apache.beam:beam-sdks-java-core:2.62.0"
+    implementation "org.apache.beam:beam-runners-direct-java:2.62.0"
     implementation "org.slf4j:slf4j-jdk14:1.7.32"
     implementation "org.apache.beam:beam-runners-spark-3:2.62.0"
     implementation "org.apache.spark:spark-core_2.12:${sparkVersion}"
     implementation "org.apache.spark:spark-streaming_2.12:${sparkVersion}"
+    // https://mvnrepository.com/artifact/org.apache.beam/beam-sdks-java-io-amazon-web-services
+	implementation 'org.apache.beam:beam-sdks-java-io-amazon-web-services:2.62.0'
+    
     implementation "com.google.guava:guava:31.1-jre" 
 
     // Tests dependencies.
