@@ -9,6 +9,8 @@
 
 plugins {
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.2' // Use a recent version
+
 }
 
 repositories {
@@ -35,7 +37,6 @@ dependencies {
     implementation "org.apache.beam:beam-runners-spark-3:2.62.0"
     implementation "org.apache.spark:spark-core_2.12:${sparkVersion}"
     implementation "org.apache.spark:spark-streaming_2.12:${sparkVersion}"
-    // https://mvnrepository.com/artifact/org.apache.beam/beam-sdks-java-io-amazon-web-services
 	implementation 'org.apache.beam:beam-sdks-java-io-amazon-web-services:2.62.0'
     
     implementation "com.google.guava:guava:31.1-jre" 
@@ -45,19 +46,44 @@ dependencies {
     testImplementation 'org.hamcrest:hamcrest:2.2'
 }
 
+
+dependencies {
+    // App dependencies.
+    implementation "org.apache.beam:beam-sdks-java-core:2.62.0"
+    implementation "org.apache.beam:beam-runners-direct-java:2.62.0"
+    implementation "org.slf4j:slf4j-jdk14:1.7.32"
+    implementation "org.apache.beam:beam-runners-spark-3:2.62.0"
+    implementation "org.apache.spark:spark-core_2.12:${sparkVersion}"
+    implementation "org.apache.spark:spark-streaming_2.12:${sparkVersion}"
+    implementation 'org.apache.beam:beam-sdks-java-io-amazon-web-services:2.62.0'
+    implementation "com.google.guava:guava:31.1-jre"
+
+    // Tests dependencies.
+    testImplementation "junit:junit:4.13.2"
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+}
+
 // Package a self-contained jar file.
 jar {
-    archiveBaseName = 'pipeline'
-    destinationDirectory = file('build')
+    archiveBaseName = 'beam-spark'
     manifest {
         attributes 'Main-Class': 'dashbikash.beamspark.BeamSparkApp'
     }
     exclude 'META-INF/*.SF'
     exclude 'META-INF/*.DSA'
     exclude 'META-INF/*.RSA'
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    zip64 true
+    // Include all dependencies in the JAR (fat JAR/uber JAR)
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+    // Remove duplicate entries in the jar (important for beam)
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 }
+
+shadowJar {
+    zip64 = true
+    mergeServiceFiles()
+}
+
 

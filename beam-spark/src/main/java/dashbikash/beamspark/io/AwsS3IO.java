@@ -3,12 +3,16 @@ package dashbikash.beamspark.io;
 import org.apache.beam.runners.spark.SparkPipelineOptions;
 import org.apache.beam.runners.spark.SparkRunner;
 import org.apache.beam.sdk.Pipeline;
+import org.apache.beam.sdk.coders.CoderRegistry;
+import org.apache.beam.sdk.coders.StringUtf8Coder;
 import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.io.aws.options.S3Options;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.transforms.Filter;
 import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.values.PCollection;
+import org.apache.beam.sdk.coders.ByteArrayCoder;
+import org.apache.beam.sdk.coders.CoderRegistry;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
@@ -43,6 +47,9 @@ public class AwsS3IO {
         ));
         
         Pipeline p=Pipeline.create(options);
+        CoderRegistry coderRegistry = p.getCoderRegistry();
+        coderRegistry.registerCoderForClass(String.class, StringUtf8Coder.of());
+
         PCollection<String> input= p.apply("ReadCsv", TextIO.read().from(INPUT_FILE));
         PCollection<String> filteredLines=input
         		.apply(Filter.by((String line) -> !line.startsWith("id")))
