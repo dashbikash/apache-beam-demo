@@ -1,12 +1,12 @@
 id,email,phone,country_code,age
-1,john.doe@example.com,1234567890,US,25
+1,john.doe@example.com,123-4567-890,US,25
 2,jane.doe@example.com,2345678901,CA,30
 3,bob.smith@example.com,3456789012,GB,22
 4,alice.jones@example.com,4567890123,AU,28
 5,charlie.brown@example.com,5678901234,IN,35
 6,eve.adams@example.com,6789012345,US,27
 7,mike.johnson@example.com,7890123456,CA,32
-8,susan.wilson@example.com,8901234567,GB,24
+8,susan.wilson@example.com,(89) (012) 34567,GB,24
 9,paul.martin@example.com,9012345678,AU,29
 10,lisa.moore@example.com,0123456789,IN,31
 11,jack.white@example.com,1234567890,US,26

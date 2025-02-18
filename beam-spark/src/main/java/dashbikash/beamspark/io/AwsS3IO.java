@@ -21,6 +21,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
+import dashbikash.beamspark.transform.FormatTransform;
 import dashbikash.beamspark.transform.HashingTransForm;
 
 public class AwsS3IO {
@@ -33,7 +34,7 @@ public class AwsS3IO {
         
         
         String INPUT_FILE="s3://test-s3-input-lr/demo/sample_dataset.csv";
-        String OUTPUT_DIR="s3://test-s3-input-lr";
+        String OUTPUT_DIR="s3://test-s3-input-lr/demo";
         //String OUTPUT_DIR="/tmp";
 
         SparkPipelineOptions options=PipelineOptionsFactory.as(SparkPipelineOptions.class);
@@ -57,7 +58,8 @@ public class AwsS3IO {
         			
         			return !line.split(",")[3].trim().equalsIgnoreCase("IN");
         		}));
-        PCollection<String> hashedOutput=filteredLines.apply("Hashing",ParDo.of(new HashingTransForm()));
+        PCollection<String> formatted=filteredLines.apply("Formatting",ParDo.of(new FormatTransform()));
+        PCollection<String> hashedOutput=formatted.apply("Hashing",ParDo.of(new HashingTransForm()));
         
         hashedOutput.apply("WriteCsv",TextIO.write().to(OUTPUT_DIR+"/beam_output").withSuffix(".csv").withHeader(header).withoutSharding());
         p.run().waitUntilFinish();

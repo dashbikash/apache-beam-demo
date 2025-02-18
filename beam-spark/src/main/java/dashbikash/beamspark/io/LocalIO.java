@@ -9,6 +9,7 @@ import org.apache.beam.sdk.transforms.Filter;
 import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.values.PCollection;
 
+import dashbikash.beamspark.transform.FormatTransform;
 import dashbikash.beamspark.transform.HashingTransForm;
 
 public class LocalIO {
@@ -30,7 +31,8 @@ public class LocalIO {
         			
         			return !line.split(",")[3].trim().equalsIgnoreCase("IN");
         		}));
-        PCollection<String> hashedOutput=filteredLines.apply("Hashing",ParDo.of(new HashingTransForm()));
+        PCollection<String> formatted=filteredLines.apply("Formatting",ParDo.of(new FormatTransform()));
+        PCollection<String> hashedOutput=formatted.apply("Hashing",ParDo.of(new HashingTransForm()));
         hashedOutput.apply("WriteCsv",TextIO.write().to(OUTPUT_DIR+"/beam_output").withSuffix(".csv").withHeader(header).withoutSharding());
         p.run().waitUntilFinish();
 	}

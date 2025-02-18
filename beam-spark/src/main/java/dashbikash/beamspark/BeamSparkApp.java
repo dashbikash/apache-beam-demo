@@ -13,6 +13,7 @@ import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.values.PCollection;
 
 import dashbikash.beamspark.io.AwsS3IO;
+import dashbikash.beamspark.io.LocalIO;
 
 import org.apache.beam.sdk.io.aws.options.S3Options;
 
@@ -23,7 +24,7 @@ public class BeamSparkApp
         System.out.println( "Hello World!" );
         
         
-        AwsS3IO.RunPipeline();
+        LocalIO.RunPipeline();
         
         
         

@@ -7,14 +7,13 @@ import org.apache.beam.sdk.transforms.DoFn;
 import com.google.common.io.BaseEncoding;
 
 public class HashingTransForm extends DoFn<String, String>{
+	private static final long serialVersionUID = 1L;
 	@ProcessElement
 	public void process(ProcessContext c) throws Exception {
 		String[] parts=c.element().split(",");
-		StringBuilder sb=new StringBuilder();
-		if(!parts[3].equalsIgnoreCase("UK")) {
-			sb.append(parts[0]).append(",").append(this.hashing(parts[1])).append(",").append(this.hashing(parts[2])).append(",").append(parts[3]).append(",").append(parts[4]);
-		}
-		c.output(sb.toString());
+		
+		c.output(String.join(",", parts[0],this.hashing(parts[1]),this.hashing(parts[2]),parts[3],parts[4]));
+		
 	}
 	private String hashing(String in) throws Exception{
 		MessageDigest digest=MessageDigest.getInstance("SHA256");
